@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib import admin
 
+from django_dictionary_widget.widgets import DictionaryEditorWidget
 from main.apps.books.models import Book
-from main.apps.django_dictionary_widget.widgets import DictionaryEditorWidget
 
 
 class BookForm(forms.ModelForm):

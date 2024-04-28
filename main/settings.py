@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     'main.apps.books',
 
-    'main.apps.django_dictionary_widget'
+    'django_dictionary_widget'
 ]
 
 MIDDLEWARE = [

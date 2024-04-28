@@ -8,4 +8,5 @@ class DictionaryEditorWidget(forms.Widget):
 
     # TODO
     #   1. Delete key
-    #   2. Load css and js from Media
+    #   2. Options -> default keys
+    #   3. Load css and js from Media
