@@ -1,0 +1,145 @@
+<textarea id="{{ widget.attrs.id }}_textarea" name="{{ widget.name }}" required="" style="display: none"></textarea>
+
+<style>
+    button {
+        border: none;
+        border-radius: 10px;
+        color: #F6F1F1;
+        padding: 10px 20px;
+        text-align: center;
+        display: inline-block;
+        font-size: 16px;
+        transition: .4s;
+    }
+
+    .button-new {
+        background-color: #146C94;
+    }
+
+    .button-new:hover {
+        background-color: #105271;
+    }
+
+    #editor-container {
+        width: 600px;
+        max-width: 600px;
+    }
+
+    #editor-data {
+    }
+
+    #editor-menu {
+        display: flex;
+        justify-content: end;
+        margin-bottom: 10px;
+    }
+
+    .key-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .key-header {
+        display: block;
+        margin: 8px 0;
+        font-size: 20px;
+        font-weight: bold;
+        color: #146C94;
+    }
+
+    .key-content {
+        width: 95%;
+        padding: 10px;
+        line-height: 1.5;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+</style>
+
+<div id="editor-container">
+  <div id="editor-menu">
+    <button onclick="newKey()" type="button" class="button-new">
+      Add Key
+    </button>
+  </div>
+  <div id="editor-data">
+  </div>
+</div>
+
+<script>
+    let data = {{ widget.value|safe }};
+    if (data === null) {
+        data = {};
+    }
+    const editor = document.getElementById("editor-data");
+    const textarea = document.getElementById("{{widget.attrs.id}}_textarea");
+
+    initializeEditor();
+    refreshTextArea();
+
+    function refreshTextArea() {
+        const allKeys = document.getElementsByClassName('key-content');
+        const tempData = {};
+        for (const x of allKeys) {
+            tempData[x.id] = x.value;
+        }
+        textarea.value = JSON.stringify(tempData);
+    }
+
+    function newKey() {
+        const newKey = prompt("Enter key name");
+        if (!data.hasOwnProperty(newKey) && newKey !== '' && newKey !== null) {
+            data[newKey] = "";
+            addKey(newKey, data[newKey]);
+            refreshTextArea();
+        }
+    }
+
+    function addKey(key, value) {
+        // Create div element
+        const divElement = document.createElement('div');
+
+        // Create label element
+        const labelGroupElement = document.createElement('div');
+        labelGroupElement.setAttribute('class', 'key-group')
+
+        const labelElement = document.createElement('label');
+        labelElement.setAttribute('for', key);
+        labelElement.setAttribute('class', 'key-header')
+        labelElement.textContent = key;
+
+        labelGroupElement.appendChild(labelElement)
+
+        // Create input element
+        const textareaElement = document.createElement('textarea');
+        textareaElement.setAttribute('id', key);
+        textareaElement.setAttribute('class', 'key-content');
+        textareaElement.setAttribute('rows', '2');
+        textareaElement.setAttribute('placeholder', 'Enter value');
+        textareaElement.textContent = value;
+        textareaElement.addEventListener('input', function () {
+            refreshTextArea();
+        });
+
+        // Append label and input elements to the div
+        divElement.appendChild(labelGroupElement);
+        divElement.appendChild(textareaElement);
+
+        // Append the div to the editor div
+        editor.appendChild(divElement);
+    }
+
+    function initializeEditor() {
+        for (let key in data) {
+            addKey(key, data[key]);
+        }
+    }
+
+    function clearEditor() {
+        while (editor.firstChild) {
+            editor.removeChild(editor.firstChild);
+        }
+    }
+
+</script>

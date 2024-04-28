@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<style>
+    button {
+        border: none;
+        border-radius: 10px;
+        color: #F6F1F1;
+        padding: 10px 20px;
+        text-align: center;
+        display: inline-block;
+        font-size: 16px;
+        transition: .4s;
+    }
+
+    .button-new {
+        background-color: #146C94;
+    }
+
+    .button-new:hover {
+        background-color: #105271;
+    }
+
+    #editor-container {
+        max-width: 600px;
+    }
+
+    #editor-data {
+    }
+
+    #editor-menu {
+        display: flex;
+        justify-content: end;
+        margin-bottom: 10px;
+    }
+
+    .key-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .key-header {
+        display: block;
+        margin: 8px 0;
+        font-size: 20px;
+        font-weight: bold;
+        color: #146C94;
+    }
+
+    .key-content {
+        width: 95%;
+        padding: 10px;
+        line-height: 1.5;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+</style>
+
+<body>
+
+<div id="editor-container">
+  <div id="editor-menu">
+    <button onclick="newKey()" type="button" class="button-new">
+      Add Key
+    </button>
+  </div>
+  <div id="editor-data">
+  </div>
+</div>
+
+<script>
+    const data = {
+        Thai: "test Thai",
+        English: "test English",
+        English3: "test English",
+        English4: "test English",
+    };
+    const editor = document.getElementById("editor-data");
+    initializeEditor();
+
+    function newKey() {
+        const newKey = prompt("Enter key name");
+        if (!data.hasOwnProperty(newKey) && newKey !== '' && newKey !== null) {
+            data[newKey] = "";
+            addKey(newKey, data[newKey]);
+        }
+    }
+
+    function addKey(key, value) {
+        // Create div element
+        const divElement = document.createElement('div');
+
+        // Create label element
+        const labelGroupElement = document.createElement('div');
+        labelGroupElement.setAttribute('class', 'key-group')
+
+        const labelElement = document.createElement('label');
+        labelElement.setAttribute('for', key);
+        labelElement.setAttribute('class', 'key-header')
+        labelElement.textContent = key;
+
+        labelGroupElement.appendChild(labelElement)
+
+        // Create input element
+        const textareaElement = document.createElement('textarea');
+        textareaElement.setAttribute('id', key);
+        textareaElement.setAttribute('class', 'key-content');
+        textareaElement.setAttribute('rows', '2');
+        textareaElement.setAttribute('placeholder', 'Enter value');
+        textareaElement.textContent = value;
+
+
+        // Append label and input elements to the div
+        divElement.appendChild(labelGroupElement);
+        divElement.appendChild(textareaElement);
+
+        // Append the div to the editor div
+        editor.appendChild(divElement);
+    }
+
+    function initializeEditor() {
+        for (let key in data) {
+            console.log(key, data[key]);
+            addKey(key, data[key]);
+        }
+    }
+
+    function clearEditor() {
+        while (editor.firstChild) {
+            editor.removeChild(editor.firstChild);
+        }
+    }
+
+</script>
+
+</body>
+</html>
